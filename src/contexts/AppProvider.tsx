@@ -1,8 +1,26 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import type React from 'react';
+import { createContext, useState, useContext, type ReactNode, useEffect } from 'react'
+import { type SammlungTypen, SammlungsTyp } from '@/features/sammlung/types';
+import type { ErinnerungTypen } from '@/features/erinnerung/types';
 
 // Definiere den Kontext-Typ
 type AppContextType = {
-  // Hier kommen später die globalen Zustände und Funktionen hin
+  // Sammlungs-bezogene Zustände und Funktionen
+  sammlungen: SammlungTypen[];
+  setSammlungen: React.Dispatch<React.SetStateAction<SammlungTypen[]>>;
+  selectedSammlung: SammlungTypen | null;
+  setSelectedSammlung: React.Dispatch<React.SetStateAction<SammlungTypen | null>>;
+  
+  // Erinnerungs-bezogene Zustände und Funktionen
+  erinnerungen: Record<string, ErinnerungTypen[]>;
+  setErinnerungen: React.Dispatch<React.SetStateAction<Record<string, ErinnerungTypen[]>>>;
+  
+  // Such-bezogene Zustände und Funktionen
+  suchQuery: string;
+  setSuchQuery: React.Dispatch<React.SetStateAction<string>>;
+  
+  // Allgemeine App-Funktionen
+  isInitialized: boolean;
 };
 
 // Erstelle den Kontext mit einem Default-Wert
@@ -10,11 +28,58 @@ const AppContext = createContext<AppContextType>({} as AppContextType);
 
 // Erstelle den Provider
 export function AppProvider({ children }: { children: ReactNode }) {
-  // Hier kommen später die Zustandsvariablen hin
-
+  // Sammlungs-Zustände
+  const [sammlungen, setSammlungen] = useState<SammlungTypen[]>([]);
+  const [selectedSammlung, setSelectedSammlung] = useState<SammlungTypen | null>(null);
+  
+  // Erinnerungs-Zustände
+  const [erinnerungen, setErinnerungen] = useState<Record<string, ErinnerungTypen[]>>({});
+  
+  // Such-Zustände
+  const [suchQuery, setSuchQuery] = useState<string>('');
+  
+  // App-Zustand
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+  
+  // Initialisiere die App
+  useEffect(() => {
+    // Hier würde später der Code zum Laden der Daten aus der Datenbank stehen
+    
+    // Mock-Daten für die Entwicklung
+    const mockSammlungen: SammlungTypen[] = [
+      {
+        id: '1',
+        name: 'Meine Filme',
+        type: SammlungsTyp.FILM,
+        erstelltAm: new Date(),
+        aktualisiertAm: new Date(),
+        plattform: 'Netflix'
+      },
+      {
+        id: '2',
+        name: 'Restaurants in Berlin',
+        type: SammlungsTyp.LOKAL,
+        erstelltAm: new Date(),
+        aktualisiertAm: new Date(),
+        kategorie: 'Restaurant'
+      }
+    ];
+    
+    setSammlungen(mockSammlungen);
+    setIsInitialized(true);
+  }, []);
+  
   // Werte, die im Context bereitgestellt werden
   const contextValue: AppContextType = {
-    // Hier kommen später die Zustände und Funktionen hin
+    sammlungen,
+    setSammlungen,
+    selectedSammlung,
+    setSelectedSammlung,
+    erinnerungen,
+    setErinnerungen,
+    suchQuery,
+    setSuchQuery,
+    isInitialized
   };
 
   return (
@@ -26,5 +91,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
 // Hook für den einfachen Zugriff auf den Kontext
 export function useApp() {
-  return useContext(AppContext);
+  const context = useContext(AppContext);
+  
+  if (context === undefined) {
+    throw new Error('useApp must be used within an AppProvider');
+  }
+  
+  return context;
 }
