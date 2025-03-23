@@ -4,7 +4,7 @@ import { erinnerungExtendedStorage } from '../storage/erinnerungExtendedStorage'
 import type { ErinnerungTypen } from '@/features/erinnerung/types';
 
 // Benötigter Typ für Erinnerungen mit Datumsfeld
-type ErinnerungMitDatum = ErinnerungTypen & {
+export type ErinnerungMitDatum = ErinnerungTypen & {
   erinnerungsDatum?: Date;
   benachrichtigungId?: string;
 };

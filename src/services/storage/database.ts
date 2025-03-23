@@ -78,11 +78,11 @@ export class Database {
       if (filteredKeys.length === 0) {
         return [];
       }
-
+  
       const jsonValues = await AsyncStorage.multiGet(filteredKeys);
       return jsonValues
         .map(([_, value]) => (value ? JSON.parse(value) : null))
-        .filter((item): item is T => item !== null);
+        .filter((item): item is unknown => item !== null && typeof item === 'object') as T[];
     } catch (error) {
       console.error('Fehler beim Abrufen aller Daten:', error);
       throw new Error('Daten konnten nicht abgerufen werden.');

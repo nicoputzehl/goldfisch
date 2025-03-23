@@ -116,6 +116,9 @@ export const sammlungExtendedStorage = {
       };
     } catch (error) {
       console.error('Fehler beim Abrufen der Sammlungszusammenfassung:', error);
+      if (error instanceof Error) {
+        throw error; // Re-throw the original error to preserve the message
+      }
       throw new Error('Sammlungszusammenfassung konnte nicht abgerufen werden');
     }
   },

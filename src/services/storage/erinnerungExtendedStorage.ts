@@ -252,7 +252,7 @@ export const erinnerungExtendedStorage = {
   async getUpcoming(tage = 7): Promise<ErinnerungMitDatum[]> {
     const jetzt = new Date();
     const ende = new Date();
-    ende.setDate(ende.getDate() + tage);
+    ende.setDate(jetzt.getDate() + tage);
     
     return await erinnerungDB.query<ErinnerungMitDatum>((erinnerung) => {
       const erinnerungMitDatum = erinnerung as ErinnerungMitDatum;
