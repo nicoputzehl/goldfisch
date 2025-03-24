@@ -2,6 +2,8 @@ import type React from 'react';
 import { createContext, useState, useContext, type ReactNode, useEffect } from 'react'
 import { type SammlungTypen, SammlungsTyp } from '@/features/sammlung/types';
 import type { ErinnerungTypen } from '@/features/erinnerung/types';
+import { PaperProvider } from 'react-native-paper';
+import { theme } from '@/constants/theme';
 
 // Definiere den Kontext-Typ
 type AppContextType = {
@@ -83,9 +85,11 @@ export function AppProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AppContext.Provider value={contextValue}>
-      {children}
-    </AppContext.Provider>
+    <PaperProvider theme={theme}>
+      <AppContext.Provider value={contextValue}>
+        {children}
+      </AppContext.Provider>
+    </PaperProvider>
   );
 }
 
