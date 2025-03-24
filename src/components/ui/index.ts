@@ -1,22 +1,15 @@
-export { Button } from './Button';
-export { Input, type InputRef } from './Input';
-export { Card } from './Card';
-export { Tag, TagContainer } from './Tag';
-export { ThemeDemo } from './ThemeDemo';
-export {
-  Container,
-  ScrollContainer,
-  Row,
-  Spacer
-} from './Layout';
+// Basis-UI-Komponenten
+export * from './Button';
+export * from './Card';
+export * from './Input';
+export * from './Tag';
+export * from './Layout';
 
-// Reexport theme constants for easier usage
-export {
-  theme,
-  SPACING,
-  FONT_SIZES,
-  BORDER_RADIUS,
-  SHADOWS,
-  ANIMATION,
-  Z_INDEX
-} from '@/constants/theme';
+// Spezialisierte Input-Komponenten
+export * from './inputs';
+
+// Export andere UI-Utilities
+export * from '@/constants/theme';
+export * from '@/utils/colorUtils';
+export * from '@/utils/typography';
+export * from '@/utils/styles';

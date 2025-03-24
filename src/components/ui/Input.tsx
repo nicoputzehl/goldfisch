@@ -12,7 +12,7 @@ export interface InputRef {
 }
 
 // autoComplete typings from RN
-type AutoComplete = 
+export type AutoComplete = 
   | 'off'
   | 'additional-name'
   | 'address-line1'
@@ -65,7 +65,7 @@ type AutoComplete =
   | 'username-new'
   | 'url';
 
-type InputProps = {
+export interface InputProps {
   label: string;
   value: string;
   onChangeText: (text: string) => void;
@@ -92,7 +92,7 @@ type InputProps = {
   clearButton?: boolean;
   outlineColor?: string;
   activeOutlineColor?: string;
-};
+}
 
 export const Input = forwardRef<InputRef, InputProps>(({
   label,
@@ -123,7 +123,7 @@ export const Input = forwardRef<InputRef, InputProps>(({
   activeOutlineColor,
 }: InputProps, ref) => {
   const [isFocused, setIsFocused] = useState(false);
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  // biome-ignore lint/suspicious/noExplicitAny: TextInput Typ ist komplex
   const inputRef = React.useRef<any>(null);
   const theme = useTheme();
   
