@@ -15,56 +15,56 @@ export const SAMMLUNGS_TYP_FELDER: Record<SammlungsTyp, {
     pflichtFelder: ['name'],
     optionaleFelder: ['bildURL', 'beschreibung', 'plattform'],
     typName: 'Film',
-    icon: 'film-outline',
+    icon: 'movie',
     beschreibung: 'Filme, die du sehen möchtest oder gesehen hast'
   },
   [SammlungsTyp.SERIE]: {
     pflichtFelder: ['name'],
     optionaleFelder: ['bildURL', 'beschreibung', 'plattform'],
     typName: 'Serie',
-    icon: 'tv-outline',
+    icon: 'television',
     beschreibung: 'Serien, die du sehen möchtest oder gesehen hast'
   },
   [SammlungsTyp.BUCH]: {
     pflichtFelder: ['name'],
     optionaleFelder: ['bildURL', 'beschreibung', 'genre'],
     typName: 'Buch',
-    icon: 'book-outline',
+    icon: 'book',
     beschreibung: 'Bücher, die du lesen möchtest oder gelesen hast'
   },
   [SammlungsTyp.LOKAL]: {
     pflichtFelder: ['name'],
     optionaleFelder: ['bildURL', 'beschreibung', 'kategorie'],
     typName: 'Lokalität',
-    icon: 'restaurant-outline',
+    icon: 'silverware-fork-knife',
     beschreibung: 'Restaurants, Cafés oder andere Orte, die du besuchen möchtest'
   },
   [SammlungsTyp.REZEPT]: {
     pflichtFelder: ['name'],
     optionaleFelder: ['bildURL', 'beschreibung', 'kategorie'],
     typName: 'Rezept',
-    icon: 'fast-food-outline',
+    icon: 'food',
     beschreibung: 'Rezepte, die du ausprobieren möchtest'
   },
   [SammlungsTyp.NOTIZ]: {
     pflichtFelder: ['name'],
     optionaleFelder: ['bildURL', 'beschreibung', 'kategorie'],
     typName: 'Notiz',
-    icon: 'document-text-outline',
+    icon: 'note-text',
     beschreibung: 'Notizen und Gedanken'
   },
   [SammlungsTyp.LINK]: {
     pflichtFelder: ['name'],
     optionaleFelder: ['bildURL', 'beschreibung', 'kategorie'],
     typName: 'Link',
-    icon: 'link-outline',
+    icon: 'link',
     beschreibung: 'Links zu Webseiten, die du besuchen möchtest'
   },
   [SammlungsTyp.ANDERE]: {
     pflichtFelder: ['name'],
     optionaleFelder: ['bildURL', 'beschreibung', 'benutzerdefinierteFelder'],
     typName: 'Andere',
-    icon: 'apps-outline',
+    icon: 'apps',
     beschreibung: 'Benutzerdefinierte Sammlung für alles andere'
   }
 };

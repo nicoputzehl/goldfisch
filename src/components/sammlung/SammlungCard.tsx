@@ -1,14 +1,14 @@
 import type React from 'react';
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { Surface, Text, useTheme } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { type SammlungTypen, SammlungsTyp } from '@/features/sammlung/types';
 import { SAMMLUNGS_TYP_FELDER } from '@/constants/typen';
 import { SPACING, SHADOWS, BORDER_RADIUS } from '@/constants/theme';
 
-// Definieren eines Typs für Ionicons Namen
-type IoniconsName = React.ComponentProps<typeof Ionicons>['name'];
+// Definieren eines Typs für MaterialCommunityIcons Namen
+type MaterialIconName = React.ComponentProps<typeof MaterialCommunityIcons>['name'];
 
 interface SammlungCardProps {
   sammlung: SammlungTypen;
@@ -27,7 +27,7 @@ export const SammlungCard = ({
   const { name, type, bildURL } = sammlung;
   
   const typInfo = SAMMLUNGS_TYP_FELDER[type];
-  const iconName = (typInfo?.icon || 'folder-outline') as IoniconsName;
+  const iconName = (typInfo?.icon || 'folder') as MaterialIconName;
   
   const handlePress = () => {
     if (onPress) {
@@ -61,7 +61,7 @@ export const SammlungCard = ({
                 { backgroundColor: theme.colors.primaryContainer },
               ]}
             >
-              <Ionicons
+              <MaterialCommunityIcons
                 name={iconName}
                 size={32}
                 color={theme.colors.primary}
@@ -79,7 +79,7 @@ export const SammlungCard = ({
               {name}
             </Text>
             <View style={styles.infoRow}>
-              <Ionicons name={iconName} size={16} color={theme.colors.onSurfaceVariant} />
+              <MaterialCommunityIcons name={iconName} size={16} color={theme.colors.onSurfaceVariant} />
               <Text
                 variant="bodySmall"
                 style={[styles.typeName, { color: theme.colors.onSurfaceVariant }]}
@@ -88,7 +88,7 @@ export const SammlungCard = ({
               </Text>
             </View>
             <View style={styles.infoRow}>
-              <Ionicons name={"document-text-outline" as IoniconsName} size={16} color={theme.colors.onSurfaceVariant} />
+              <MaterialCommunityIcons name={"text-box" as MaterialIconName} size={16} color={theme.colors.onSurfaceVariant} />
               <Text
                 variant="bodySmall"
                 style={[styles.count, { color: theme.colors.onSurfaceVariant }]}
@@ -104,8 +104,8 @@ export const SammlungCard = ({
               onPress={onOptionsPress}
               hitSlop={{ top: 10, right: 10, bottom: 10, left: 10 }}
             >
-              <Ionicons
-                name={"ellipsis-vertical" as IoniconsName}
+              <MaterialCommunityIcons
+                name={"dots-vertical" as MaterialIconName}
                 size={20}
                 color={theme.colors.onSurfaceVariant}
               />

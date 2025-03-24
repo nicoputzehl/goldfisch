@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { StyleSheet } from 'react-native';
 import { Button as PaperButton } from 'react-native-paper';
 import { SPACING, theme } from '@/constants/theme';
 
 type ButtonProps = {
-  onPress: () => void;
+  onPress?: () => void;
   title: string;
   mode?: 'text' | 'outlined' | 'contained' | 'elevated' | 'contained-tonal';
   color?: string;
@@ -19,7 +19,8 @@ type ButtonProps = {
   uppercase?: boolean;
 };
 
-export function Button({
+// forwardRef verwenden, um Refs von außen zu akzeptieren
+export const Button = forwardRef<any, ButtonProps>(({
   onPress,
   title,
   mode = 'contained',
@@ -33,9 +34,10 @@ export function Button({
   contentStyle,
   labelStyle,
   uppercase = false,
-}: ButtonProps) {
+}, ref) => {
   return (
     <PaperButton
+      ref={ref}
       mode={mode}
       onPress={onPress}
       loading={loading}
@@ -52,7 +54,7 @@ export function Button({
       {title}
     </PaperButton>
   );
-}
+});
 
 const styles = StyleSheet.create({
   button: {

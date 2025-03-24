@@ -1,103 +1,74 @@
-import { StyleSheet, Text, View, TextInput, Pressable } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Link, router } from 'expo-router';
+import { SammlungForm, type SammlungFormData } from '@/components/sammlung';
+import { useCreateSammlung } from '@/features/sammlung/hooks';
+import { Container, Spacer } from '@/components/ui';
 
 export default function SammlungErstellenScreen() {
+  const { createSammlung, isLoading, error } = useCreateSammlung();
+
+  const handleSubmit = async (data: SammlungFormData) => {
+    const result = await createSammlung(data);
+    
+    if (result) {
+      // Zurück zur Startseite navigieren
+      router.replace('/(tabs)');
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <Container>
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
-        </Pressable>
+        <Ionicons 
+          name="arrow-back" 
+          size={24} 
+          color="#333" 
+          onPress={() => router.back()}
+          style={styles.backButton}
+        />
         <Text style={styles.title}>Neue Sammlung</Text>
       </View>
       
-      <View style={styles.form}>
-        <View style={styles.formField}>
-          <Text style={styles.label}>Name der Sammlung</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="z.B. Filme zum Anschauen"
-            placeholderTextColor="#95a5a6"
-          />
+      <Spacer size="md" />
+      
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
         </View>
-        
-        <View style={styles.formField}>
-          <Text style={styles.label}>Typ</Text>
-          <Pressable style={styles.typeSelector}>
-            <Text style={styles.typeSelectorText}>Bitte Typ auswählen</Text>
-            <Ionicons name="chevron-down" size={20} color="#333" />
-          </Pressable>
-        </View>
-        
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Sammlung erstellen</Text>
-        </Pressable>
-      </View>
-    </View>
+      )}
+      
+      <SammlungForm
+        onSubmit={handleSubmit}
+        onCancel={() => router.back()}
+        isSubmitting={isLoading}
+      />
+    </Container>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    paddingVertical: 16,
   },
   backButton: {
     marginRight: 15,
+    padding: 4,
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
   },
-  form: {
-    padding: 20,
-  },
-  formField: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
-    fontWeight: '500',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
+  errorContainer: {
+    backgroundColor: '#ffebee',
     padding: 12,
-    fontSize: 16,
-  },
-  typeSelector: {
-    borderWidth: 1,
-    borderColor: '#ddd',
     borderRadius: 8,
-    padding: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    marginBottom: 16,
   },
-  typeSelectorText: {
-    fontSize: 16,
-    color: '#95a5a6',
-  },
-  button: {
-    backgroundColor: '#3498db',
-    paddingVertical: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
+  errorText: {
+    color: '#b71c1c',
+  }
 });
