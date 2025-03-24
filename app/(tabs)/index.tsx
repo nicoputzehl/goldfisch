@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
 import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Button } from '@/components/ui';
 
 export default function SammlungenScreen() {
   return (
@@ -14,6 +15,17 @@ export default function SammlungenScreen() {
           <Pressable style={styles.button}>
             <Text style={styles.buttonText}>Neue Sammlung erstellen</Text>
           </Pressable>
+        </Link>
+      </View>
+            {/* Development only: Theme Demo Link */}
+            <View >
+        <Link href="/theme-demo" asChild>
+          <Button 
+            title="Theme Demo ansehen" 
+            mode="outlined" 
+            icon="palette-outline" 
+            onPress={() => {}}
+          />
         </Link>
       </View>
     </View>
