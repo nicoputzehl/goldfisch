@@ -1,12 +1,22 @@
-// Export UI components
 export { Button } from './Button';
+export { Input, type InputRef } from './Input';
 export { Card } from './Card';
-export { Input } from './Input';
 export { Tag, TagContainer } from './Tag';
+export { ThemeDemo } from './ThemeDemo';
+export {
+  Container,
+  ScrollContainer,
+  Row,
+  Spacer
+} from './Layout';
 
-// Export theme and style utilities
-export { default as theme } from '@/constants/theme';
-export { default as Styles } from '@/utils/styles';
-export { Typography } from '@/utils/typography';
-export { Layout } from '@/utils/layout';
-export { hexToRgba, lightenColor, darkenColor, generateAlphaColors } from '@/utils/colorUtils';
+// Reexport theme constants for easier usage
+export {
+  theme,
+  SPACING,
+  FONT_SIZES,
+  BORDER_RADIUS,
+  SHADOWS,
+  ANIMATION,
+  Z_INDEX
+} from '@/constants/theme';

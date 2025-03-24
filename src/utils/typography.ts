@@ -1,4 +1,4 @@
-import { TextStyle, StyleSheet } from 'react-native';
+import { type TextStyle, StyleSheet } from 'react-native';
 import { theme, FONT_SIZES } from '@/constants/theme';
 
 // Generate consistent text styles
@@ -32,7 +32,6 @@ export const Typography = StyleSheet.create({
   caption: createTextStyle(FONT_SIZES.xs, 'normal', theme.colors.textLight),
   button: createTextStyle(FONT_SIZES.sm, '500', theme.colors.primary),
   label: createTextStyle(FONT_SIZES.sm, '500', theme.colors.text),
-  error: createTextStyle(FONT_SIZES.xs, 'normal', theme.colors.error),
   
   // Weight variations
   bold: { fontWeight: 'bold' } as TextStyle,

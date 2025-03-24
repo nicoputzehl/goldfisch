@@ -1,62 +1,117 @@
-// Function to convert hex to rgba
-export const hexToRgba = (hex: string, alpha = 1) => {
-  if (!hex.startsWith('#')) {
-    return hex;
-  }
+/**
+ * Converts a hex color string to an RGBA string
+ * @param hexColor The hex color string (with or without '#')
+ * @param alpha The alpha value (0-1)
+ * @returns RGBA color string
+ */
+export function hexToRgba(hexColor: string, alpha = 1): string {
+  // Remove '#' if present
+  const hex = hexColor.replace('#', '');
   
-  let r = 0, g = 0, b = 0;
+  // Parse hex values
+  const r = Number.parseInt(hex.substring(0, 2), 16);
+  const g = Number.parseInt(hex.substring(2, 4), 16);
+  const b = Number.parseInt(hex.substring(4, 6), 16);
   
-  // 3 digits
-  if (hex.length === 4) {
-    r = parseInt(hex[1] + hex[1], 16);
-    g = parseInt(hex[2] + hex[2], 16);
-    b = parseInt(hex[3] + hex[3], 16);
-  } 
-  // 6 digits
-  else if (hex.length === 7) {
-    r = parseInt(hex.slice(1, 3), 16);
-    g = parseInt(hex.slice(3, 5), 16);
-    b = parseInt(hex.slice(5, 7), 16);
-  }
-  
+  // Return rgba string
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
+}
 
-// Function to lighten a color
-export const lightenColor = (hex: string, amount: number) => {
-  let r = parseInt(hex.slice(1, 3), 16);
-  let g = parseInt(hex.slice(3, 5), 16);
-  let b = parseInt(hex.slice(5, 7), 16);
+/**
+ * Lightens a hex color by a given percentage
+ * @param hexColor The hex color string
+ * @param percent The percentage to lighten (0-100)
+ * @returns Lightened hex color
+ */
+export function lightenColor(hexColor: string, percent = 10): string {
+  // Remove '#' if present
+  const hex = hexColor.replace('#', '');
   
-  r = Math.min(255, Math.round(r + (255 - r) * amount));
-  g = Math.min(255, Math.round(g + (255 - g) * amount));
-  b = Math.min(255, Math.round(b + (255 - b) * amount));
+  // Parse hex values
+  let r = Number.parseInt(hex.substring(0, 2), 16);
+  let g = Number.parseInt(hex.substring(2, 4), 16);
+  let b = Number.parseInt(hex.substring(4, 6), 16);
   
-  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-};
+  // Lighten each channel
+  r = Math.min(255, Math.floor(r + (255 - r) * (percent / 100)));
+  g = Math.min(255, Math.floor(g + (255 - g) * (percent / 100)));
+  b = Math.min(255, Math.floor(b + (255 - b) * (percent / 100)));
+  
+  // Convert back to hex
+  const rHex = r.toString(16).padStart(2, '0');
+  const gHex = g.toString(16).padStart(2, '0');
+  const bHex = b.toString(16).padStart(2, '0');
+  
+  return `#${rHex}${gHex}${bHex}`;
+}
 
-// Function to darken a color
-export const darkenColor = (hex: string, amount: number) => {
-  let r = parseInt(hex.slice(1, 3), 16);
-  let g = parseInt(hex.slice(3, 5), 16);
-  let b = parseInt(hex.slice(5, 7), 16);
+/**
+ * Darkens a hex color by a given percentage
+ * @param hexColor The hex color string
+ * @param percent The percentage to darken (0-100)
+ * @returns Darkened hex color
+ */
+export function darkenColor(hexColor: string, percent = 10): string {
+  // Remove '#' if present
+  const hex = hexColor.replace('#', '');
   
-  r = Math.max(0, Math.round(r * (1 - amount)));
-  g = Math.max(0, Math.round(g * (1 - amount)));
-  b = Math.max(0, Math.round(b * (1 - amount)));
+  // Parse hex values
+  let r = Number.parseInt(hex.substring(0, 2), 16);
+  let g = Number.parseInt(hex.substring(2, 4), 16);
+  let b = Number.parseInt(hex.substring(4, 6), 16);
   
-  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-};
+  // Darken each channel
+  r = Math.max(0, Math.floor(r * (1 - percent / 100)));
+  g = Math.max(0, Math.floor(g * (1 - percent / 100)));
+  b = Math.max(0, Math.floor(b * (1 - percent / 100)));
+  
+  // Convert back to hex
+  const rHex = r.toString(16).padStart(2, '0');
+  const gHex = g.toString(16).padStart(2, '0');
+  const bHex = b.toString(16).padStart(2, '0');
+  
+  return `#${rHex}${gHex}${bHex}`;
+}
 
-// Function to generate transparent versions of a color
-export const generateAlphaColors = (hex: string) => {
+/**
+ * Generates color variants for a given base color
+ * @param baseColor The base color in hex format
+ * @returns Object with color variants
+ */
+export function generateColorVariants(baseColor: string) {
   return {
-    alpha5: hexToRgba(hex, 0.05),
-    alpha10: hexToRgba(hex, 0.1),
-    alpha20: hexToRgba(hex, 0.2),
-    alpha30: hexToRgba(hex, 0.3),
-    alpha50: hexToRgba(hex, 0.5),
-    alpha70: hexToRgba(hex, 0.7),
-    alpha90: hexToRgba(hex, 0.9),
+    light: lightenColor(baseColor, 20),
+    main: baseColor,
+    dark: darkenColor(baseColor, 20),
+    transparent: hexToRgba(baseColor, 0.1),
   };
+}
+
+/**
+ * Checks if a color is light or dark
+ * @param hexColor The hex color string
+ * @returns Boolean indicating if the color is light
+ */
+export function isLightColor(hexColor: string): boolean {
+  // Remove '#' if present
+  const hex = hexColor.replace('#', '');
+  
+  // Parse hex values
+  const r = Number.parseInt(hex.substring(0, 2), 16);
+  const g = Number.parseInt(hex.substring(2, 4), 16);
+  const b = Number.parseInt(hex.substring(4, 6), 16);
+  
+  // Calculate brightness using the formula: (0.299*R + 0.587*G + 0.114*B)
+  const brightness = (r * 0.299 + g * 0.587 + b * 0.114);
+  
+  // Return true if the color is light (brightness > 155)
+  return brightness > 155;
+}
+
+export default {
+  hexToRgba,
+  lightenColor,
+  darkenColor,
+  generateColorVariants,
+  isLightColor,
 };

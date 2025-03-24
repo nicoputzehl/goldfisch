@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Button as PaperButton } from 'react-native-paper';
-import { SPACING } from '@/constants/theme';
+import { SPACING, theme } from '@/constants/theme';
 
 type ButtonProps = {
   onPress: () => void;
@@ -14,6 +14,9 @@ type ButtonProps = {
   compact?: boolean;
   testID?: string;
   style?: object;
+  contentStyle?: object;
+  labelStyle?: object;
+  uppercase?: boolean;
 };
 
 export function Button({
@@ -27,6 +30,9 @@ export function Button({
   compact = false,
   testID,
   style,
+  contentStyle,
+  labelStyle,
+  uppercase = false,
 }: ButtonProps) {
   return (
     <PaperButton
@@ -38,7 +44,10 @@ export function Button({
       compact={compact}
       testID={testID}
       style={[styles.button, style]}
-      textColor={color}
+      contentStyle={contentStyle}
+      labelStyle={labelStyle}
+      uppercase={uppercase}
+      buttonColor={color}
     >
       {title}
     </PaperButton>
@@ -48,5 +57,6 @@ export function Button({
 const styles = StyleSheet.create({
   button: {
     marginVertical: SPACING.sm,
+    borderRadius: theme.roundness,
   },
 });

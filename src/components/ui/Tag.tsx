@@ -1,6 +1,6 @@
 import type React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Chip, Text } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Chip } from 'react-native-paper';
 import { SPACING } from '@/constants/theme';
 
 type TagProps = {
