@@ -1,7 +1,7 @@
 /**
  * Typen und Interfaces für Erinnerungen
  */
-import { SammlungsTyp } from '../sammlung/types';
+import type { SammlungsTyp } from '../sammlung/types';
 
 // Basis-Interface für alle Erinnerungen
 export interface Erinnerung {

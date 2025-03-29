@@ -918,3 +918,193 @@ Nach der SammlungCard-Komponente (Schritt 6.1) folgen laut Entwicklungsplan:
 1. Formular für Sammlungserstellung implementieren (Schritt 6.2)
 2. Screen für Sammlungsliste auf der Startseite entwickeln (Schritt 6.3)
 3. Logik für Speichern neuer Sammlungen implementieren (Schritt 6.4)
+
+## Implementierung Schritte 6.2-6.4: Sammlung-Feature
+
+### Übersicht 6.2 - 6.4
+
+In den Schritten 6.2 bis 6.4 wurde das Sammlung-Feature der Goldfisch-App implementiert. Dieses Feature umfasst die Erstellung von Sammlungen, die Anzeige von Sammlungen auf der Startseite und die Logik zum Speichern neuer Sammlungen.
+
+### Schritt 6.2: Formular für Sammlungserstellung
+
+#### Implementierte Komponente: `SammlungForm`
+
+- **Datei**: `src/components/sammlung/SammlungForm.tsx`
+- **Zweck**: Formular für die Erstellung und Bearbeitung von Sammlungen
+- **Features**:
+  - Eingabefelder für Sammlung-Grunddaten (Name, Typ, Beschreibung)
+  - Dynamische Felder basierend auf dem Sammlungstyp
+  - Formularvalidierung für Pflichtfelder
+  - Typ-spezifische Felder wie Plattform (Film, Serie), Genre (Buch), Kategorie (Lokal)
+  - Typensichere Datenverarbeitung
+
+#### Exportierte Typen
+
+```typescript
+export interface SammlungFormData {
+  name: string;
+  type: SammlungsTyp;
+  beschreibung?: string;
+  plattform?: string;
+  genre?: string;
+  kategorie?: string;
+}
+```
+
+### Schritt 6.3: Screen für Sammlungsliste auf der Startseite
+
+#### Implementierte Komponente: Startseite (Index-Screen)
+
+- **Datei**: `app/(tabs)/index.tsx`
+- **Zweck**: Anzeige aller Sammlungen auf der Startseite
+- **Features**:
+  - Auflistung aller vorhandenen Sammlungen als Karten
+  - Laden und Anzeigen der Anzahl der Erinnerungen pro Sammlung
+  - Leer- und Fehlerzustände
+  - Pull-to-Refresh-Funktionalität
+  - "Neue Sammlung erstellen"-Button
+  - Navigationen zu Sammlungsdetails
+
+#### Integrierte Hooks
+
+- **useSammlungen**: Lädt alle Sammlungen aus dem Storage
+- **useFocusEffect**: Aktualisiert die Sammlungen, wenn der Screen fokussiert wird
+
+### Schritt 6.4: Logik für Speichern neuer Sammlungen
+
+#### Implementierter Hook: `useCreateSammlung`
+
+- **Datei**: `src/features/sammlung/hooks/useCreateSammlung.ts`
+- **Zweck**: Kommunikation mit dem Datenbank-Service zum Erstellen neuer Sammlungen
+- **Features**:
+  - Verwaltung des Ladezustands (`isLoading`)
+  - Fehlerbehandlung (`error`)
+  - Asynchrone Funktion zum Erstellen von Sammlungen (`createSammlung`)
+
+#### Implementierter Screen: `SammlungErstellenScreen`
+
+- **Datei**: `app/sammlung/erstellen.tsx`
+- **Zweck**: Screen für die Erstellung einer neuen Sammlung
+- **Features**:
+  - Integriert das `SammlungForm`
+  - Verwendet den `useCreateSammlung`-Hook für die Datenspeicherung
+  - Fehleranzeige
+  - Navigation zurück zur Startseite nach erfolgreicher Erstellung
+
+### Datenfluss für "Sammlung erstellen"
+
+1. Benutzer navigiert zur Startseite (`app/(tabs)/index.tsx`)
+2. Benutzer klickt auf "Neue Sammlung erstellen"
+3. Navigation zum `SammlungErstellenScreen` (`app/sammlung/erstellen.tsx`)
+4. Benutzer füllt das `SammlungForm` aus
+5. Bei Speichern wird der `useCreateSammlung`-Hook aufgerufen
+6. Hook nutzt `sammlungStorage`, um Daten in der lokalen Datenbank zu speichern
+7. Bei Erfolg wird der Benutzer zurück zur Startseite geleitet
+8. Die Startseite aktualisiert die Sammlungsliste und zeigt die neue Sammlung an
+
+### Abhängigkeiten 6.2 - 6.4
+
+- Verwendet vorhandene UI-Komponenten: `TextField`, `SelectInput`, `Button`, `Container`
+- Nutzt `sammlungStorage` zum Speichern von Sammlungsdaten
+- Verwendet das Typsystem mit `SammlungsTyp` und `SAMMLUNGS_TYP_FELDER`
+- Verwendet `expo-router` für die Navigation
+
+### Zusammenfassung 6.2 -6.4
+
+Die implementierten Komponenten bilden zusammen ein vollständiges Feature für das Erstellen und Anzeigen von Sammlungen in der Goldfisch-App. Benutzer können verschiedene Arten von Sammlungen (Film, Buch, Lokal, etc.) erstellen, und diese werden auf der Startseite angezeigt. Die Implementierung folgt einem einheitlichen Datenfluss-Muster, verwendet typensichere Komponenten und ist bereit für die Integration mit dem Erinnerungs-Feature.
+
+## Implementierung Schritt 7.1: Dynamisches ErinnerungForm
+
+### Übersicht 7.1
+
+In diesem Schritt wurde das dynamische Erinnerungsformular implementiert, das basierend auf dem Sammlungstyp (Film, Buch, Lokal, etc.) unterschiedliche Eingabefelder anzeigt. Dies ist ein zentraler Bestandteil des Erinnerungs-Features der Goldfisch-App.
+
+### Implementierte Komponenten 7.1
+
+#### 1. `useCreateErinnerung` Hook
+
+- **Datei**: `src/features/erinnerung/hooks/useCreateErinnerung.ts`
+- **Zweck**: Kommunikation mit dem Datenbank-Service zum Erstellen neuer Erinnerungen
+- **Features**:
+  - Verwaltung des Ladezustands (`isLoading`)
+  - Fehlerbehandlung (`error`)
+  - Asynchrone Funktion zum Erstellen von Erinnerungen (`createErinnerung`)
+
+#### 2. `ErinnerungForm` Komponente
+
+- **Datei**: `src/components/erinnerung/ErinnerungForm.tsx`
+- **Zweck**: Dynamisches Formular für die Erstellung von Erinnerungen
+- **Features**:
+  - Basisfelder für alle Erinnerungstypen (Titel, Tags, Notizen)
+  - Dynamische Felder basierend auf dem Sammlungstyp:
+    - **Film**: Regisseur, Erscheinungsjahr, Genre, Dauer
+    - **Serie**: Genre, Erscheinungsjahr
+    - **Buch**: Autor, Genre, Erscheinungsjahr, Seitenanzahl
+    - **Lokal**: Adresse, Kategorie, Öffnungszeiten, Webseite, Telefon
+    - **Notiz**: Inhalt, Priorität
+    - **Link**: URL
+  - Formularvalidierung für Pflichtfelder
+  - Typensichere Datenverarbeitung
+
+#### 3. `ErinnerungErstellenScreen` Komponente
+
+- **Datei**: `app/sammlung/[id]/erinnerung/erstellen.tsx`
+- **Zweck**: Screen für die Erstellung einer neuen Erinnerung
+- **Features**:
+  - Lädt Sammlungsdaten anhand der übergebenen ID
+  - Bestimmt den Sammlungstyp für das dynamische Formular
+  - Fehlerbehandlung für nicht gefundene Sammlungen
+  - Sammlungstitel-Anzeige
+  - Formularverwaltung und Datenübergabe
+  - Navigation zurück zur Sammlungsdetailseite nach erfolgreicher Erstellung
+
+### Exportierte Typen 7.1
+
+```typescript
+export interface ErinnerungFormData {
+  titel: string;
+  tags?: string[];
+  notizen?: string;
+  
+  // Film/Serie spezifische Felder
+  regisseur?: string;
+  erscheinungsJahr?: number;
+  genre?: string;
+  dauer?: number;
+  
+  // Buch spezifische Felder
+  autor?: string;
+  seitenanzahl?: number;
+  
+  // Lokal spezifische Felder
+  adresse?: string;
+  kategorie?: string;
+  oeffnungszeiten?: string;
+  webseite?: string;
+  telefon?: string;
+  
+  // Notiz spezifische Felder
+  inhalt?: string;
+  prioritaet?: 'niedrig' | 'mittel' | 'hoch';
+  
+  // Link spezifische Felder
+  url?: string;
+}
+```
+
+### Abhängigkeiten 7.1
+
+- Verwendet vorhandene UI-Komponenten: `TextField`, `TagInput`, `SelectInput`, `Button`
+- Nutzt `sammlungStorage` zum Laden von Sammlungsinformationen
+- Greift auf `erinnerungStorage` über den `useCreateErinnerung`-Hook zu
+- Verwendet das Typsystem mit `SammlungsTyp` und `ERINNERUNGS_TYP_FELDER`
+
+### Bemerkungen
+
+- Beim Übergeben der Daten an den `createErinnerung`-Hook musste beachtet werden, dass die Felder einzeln übergeben werden, da das `CreateErinnerungInput`-Interface eine spezifische Struktur erwartet.
+- Die Implementierung unterstützt alle in der App definierten Sammlungstypen und zeigt nur die relevanten Felder für jeden Typ.
+- Die Formularvalidierung stellt sicher, dass alle Pflichtfelder (z.B. Titel) ausgefüllt sind, bevor die Erinnerung erstellt werden kann.
+
+### Nächste Schritte nach 7.1
+
+Als nächstes sollte die `ErinnerungCard`-Komponente implementiert werden (Schritt 7.2), um Erinnerungen in Listen darstellen zu können.
