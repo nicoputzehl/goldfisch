@@ -1,80 +1,64 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import { router, useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
-import { ErinnerungForm, type ErinnerungFormData } from '@/components/erinnerung';
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from 'react-native';
+import { useLocalSearchParams, router } from 'expo-router';
+import { IconButton } from 'react-native-paper';
+import { ErinnerungForm, type ErinnerungFormData } from '@/components/erinnerung/ErinnerungForm';
 import { useCreateErinnerung } from '@/features/erinnerung/hooks';
 import { sammlungStorage } from '@/services/storage/sammlungStorage';
-import { Container, Spacer } from '@/components/ui';
 import type { SammlungsTyp } from '@/features/sammlung/types';
+import { Container, Spacer } from '@/components/ui';
+import { SPACING } from '@/constants/theme';
 
 export default function ErinnerungErstellenScreen() {
   const { id } = useLocalSearchParams();
-  const sammlungId = Array.isArray(id) ? id[0] : id;
+  const sammlungId = id as string;
   
   const [sammlungsTyp, setSammlungsTyp] = useState<SammlungsTyp | null>(null);
-  const [sammlungName, setSammlungName] = useState<string>('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [isLoadingSammlung, setIsLoadingSammlung] = useState(true);
+  const [sammlungError, setSammlungError] = useState<string | null>(null);
   
-  const { createErinnerung, isLoading: isSubmitting, error: submitError } = useCreateErinnerung();
+  const { createErinnerung, isLoading, error } = useCreateErinnerung();
   
-  // Laden der Sammlungsinformationen
+  // Sammlung laden, um den Typ zu ermitteln
   useEffect(() => {
     const loadSammlung = async () => {
       try {
         const sammlung = await sammlungStorage.getById(sammlungId);
         if (sammlung) {
           setSammlungsTyp(sammlung.type);
-          setSammlungName(sammlung.name);
         } else {
-          setLoadError('Sammlung nicht gefunden');
+          setSammlungError('Sammlung nicht gefunden');
         }
-      } catch (error) {
-        setLoadError('Fehler beim Laden der Sammlung');
-        console.error(error);
+      } catch (err) {
+        setSammlungError('Fehler beim Laden der Sammlung');
       } finally {
-        setIsLoading(false);
+        setIsLoadingSammlung(false);
       }
     };
     
     loadSammlung();
   }, [sammlungId]);
-  
-  const handleSubmit = async (data: ErinnerungFormData) => {
+
+  const handleSubmit = async (formData: ErinnerungFormData) => {
     if (!sammlungsTyp) return;
     
-    const result = await createErinnerung({
+    // Daten für die Erstellung einer Erinnerung vorbereiten
+    const erinnerungData = {
       sammlungId,
-      titel: data.titel,
-      tags: data.tags,
-      notizen: data.notizen,
-      // Typspezifische Felder
-      regisseur: data.regisseur,
-      erscheinungsJahr: data.erscheinungsJahr,
-      genre: data.genre,
-      dauer: data.dauer,
-      autor: data.autor,
-      seitenanzahl: data.seitenanzahl,
-      adresse: data.adresse,
-      kategorie: data.kategorie,
-      oeffnungszeiten: data.oeffnungszeiten,
-      webseite: data.webseite,
-      telefon: data.telefon,
-      inhalt: data.inhalt,
-      prioritaet: data.prioritaet,
-      url: data.url
-    });
+      sammlungsTyp,
+      ...formData
+    };
+    
+    const result = await createErinnerung(erinnerungData);
     
     if (result) {
-      // Zurück zur Sammlungsdetailseite navigieren
-      router.back();
+      // Zurück zur Sammlungsdetailansicht navigieren
+      router.replace(`/sammlung/${sammlungId}`);
     }
   };
-  
-  // Zeigt Ladezustand
-  if (isLoading) {
+
+  // Zeige Ladeindikator, während die Sammlung geladen wird
+  if (isLoadingSammlung) {
     return (
       <Container center>
         <ActivityIndicator size="large" color="#3498db" />
@@ -82,57 +66,54 @@ export default function ErinnerungErstellenScreen() {
     );
   }
   
-  // Zeigt Fehler an
-  if (loadError || !sammlungsTyp) {
+  // Zeige Fehlermeldung, wenn die Sammlung nicht geladen werden konnte
+  if (sammlungError || !sammlungsTyp) {
     return (
       <Container>
         <View style={styles.header}>
-          <Ionicons 
-            name="arrow-back" 
-            size={24} 
-            color="#333" 
+          <IconButton
+            icon="arrow-left"
+            size={24}
             onPress={() => router.back()}
-            style={styles.backButton}
           />
-          <Text style={styles.title}>Neue Erinnerung</Text>
+          <Text style={styles.title}>Fehler</Text>
         </View>
         
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{loadError || 'Unbekannter Fehler beim Laden der Sammlung'}</Text>
+          <Text style={styles.errorText}>{sammlungError || 'Unbekannter Fehler'}</Text>
+          <Spacer size="md" />
+          <IconButton
+            icon="refresh"
+            size={24}
+            onPress={() => router.reload()}
+          />
         </View>
       </Container>
     );
   }
-  
+
   return (
     <Container>
       <View style={styles.header}>
-        <Ionicons 
-          name="arrow-back" 
-          size={24} 
-          color="#333" 
+        <IconButton
+          icon="arrow-left"
+          size={24}
           onPress={() => router.back()}
-          style={styles.backButton}
         />
         <Text style={styles.title}>Neue Erinnerung</Text>
       </View>
       
-      <Text style={styles.subtitle}>Für Sammlung: {sammlungName}</Text>
-      
-      {submitError && (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{submitError}</Text>
+      {error && (
+        <View style={styles.errorBanner}>
+          <Text style={styles.errorText}>{error}</Text>
         </View>
       )}
       
-      <Spacer size="md" />
-      
       <ErinnerungForm
         sammlungsTyp={sammlungsTyp}
-        sammlungId={sammlungId}
         onSubmit={handleSubmit}
         onCancel={() => router.back()}
-        isSubmitting={isSubmitting}
+        isSubmitting={isLoading}
       />
     </Container>
   );
@@ -142,28 +123,31 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 16,
-  },
-  backButton: {
-    marginRight: 15,
-    padding: 4,
+    paddingHorizontal: SPACING.sm,
+    paddingVertical: SPACING.md,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginBottom: 16,
+    marginLeft: SPACING.sm,
   },
   errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: SPACING.lg,
+  },
+  errorBanner: {
     backgroundColor: '#ffebee',
-    padding: 12,
+    padding: SPACING.md,
     borderRadius: 8,
-    marginBottom: 16,
+    marginHorizontal: SPACING.md,
+    marginTop: SPACING.md,
   },
   errorText: {
     color: '#b71c1c',
-  }
+    textAlign: 'center',
+  },
 });

@@ -13,7 +13,12 @@
 │   │   ├── index.tsx
 │   │   ├── suche
 │   │   └── suche.tsx
+│   ├── __tests__
+│   │   ├── sammlung-detail.test.tsx
+│   │   ├── sammlung-erstellen.test.tsx
+│   │   └── sammlungen-screen.test.tsx
 │   ├── _layout.tsx
+│   ├── erinnerung-card-demo.tsx
 │   ├── sammlung
 │   │   ├── [id]
 │   │   │   ├── erinnerung
@@ -33,6 +38,7 @@
 ├── babel.config.js
 ├── index.ts
 ├── jest.config.js
+├── jest.setup.additional.js
 ├── jest.setup.js
 ├── metro.config.js
 ├── package-lock.json
@@ -40,6 +46,10 @@
 ├── src
 │   ├── components
 │   │   ├── erinnerung
+│   │   │   ├── ErinnerungCard.tsx
+│   │   │   ├── ErinnerungCardDemo.tsx
+│   │   │   ├── ErinnerungForm.tsx
+│   │   │   └── index.ts
 │   │   ├── index.ts
 │   │   ├── sammlung
 │   │   │   ├── SammlungCard.tsx
@@ -48,7 +58,8 @@
 │   │   │   │   └── __tests__
 │   │   │   ├── SammlungForm.tsx
 │   │   │   ├── __tests__
-│   │   │   │   └── SammlungCard.test.tsx
+│   │   │   │   ├── SammlungCard.test.tsx
+│   │   │   │   └── SammlungForm.test.tsx
 │   │   │   └── index.ts
 │   │   └── ui
 │   │       ├── Button.tsx
@@ -74,9 +85,16 @@
 │   │   └── ThemeProvider.tsx
 │   ├── features
 │   │   ├── erinnerung
+│   │   │   ├── hooks
+│   │   │   │   ├── index.ts
+│   │   │   │   └── useCreateErinnerung.ts
 │   │   │   └── types.ts
 │   │   ├── sammlung
+│   │   │   ├── __tests__
 │   │   │   ├── hooks
+│   │   │   │   ├── __tests__
+│   │   │   │   │   ├── useCreateSammlung.test.ts
+│   │   │   │   │   └── useSammlungen.test.ts
 │   │   │   │   ├── index.ts
 │   │   │   │   ├── useCreateSammlung.ts
 │   │   │   │   └── useSammlungen.ts
@@ -98,6 +116,7 @@
 │   │       │   ├── erinnerungStorage.test.ts
 │   │       │   ├── erinnerungTags.test.ts
 │   │       │   ├── sammlungExtendedStorage.test.ts
+│   │       │   ├── sammlungStorage.additional.test.ts
 │   │       │   ├── sammlungStorage.test.ts
 │   │       │   └── tagStorage.test.ts
 │   │       ├── database.ts
@@ -115,4 +134,4 @@
 ├── tsconfig.json
 └── yarn.lock
 
-37 directories, 79 files
+41 directories, 94 files

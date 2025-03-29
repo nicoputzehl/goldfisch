@@ -101,6 +101,14 @@ export default function SammlungenScreen() {
           >
             Sammlung Card Demo ansehen
           </Button>
+          <Spacer size="sm" />
+          <Button 
+            mode="outlined" 
+            icon="palette"
+            onPress={() => router.push('/erinnerung-card-demo')}
+          >
+            Erinnerung Card Demo ansehen
+          </Button>
         </View>
       </Container>
     );
