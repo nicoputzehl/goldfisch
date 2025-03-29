@@ -12,6 +12,7 @@ import { SPACING } from '@/constants/theme';
 export default function ErinnerungErstellenScreen() {
   const { id } = useLocalSearchParams();
   const sammlungId = id as string;
+  console.log({id})
   
   const [sammlungsTyp, setSammlungsTyp] = useState<SammlungsTyp | null>(null);
   const [isLoadingSammlung, setIsLoadingSammlung] = useState(true);

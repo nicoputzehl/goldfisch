@@ -22,6 +22,7 @@ export function useSammlungen() {
     }
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     loadSammlungen();
   }, []);
